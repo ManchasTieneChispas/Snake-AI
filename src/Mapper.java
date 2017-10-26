@@ -10,6 +10,7 @@ public class Mapper {
         input = new Matrix(i, 1);
         hidden = new Matrix(h, 1);
         output = new Matrix(o, 1);
+
     }
 
 
