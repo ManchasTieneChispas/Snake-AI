@@ -1,10 +1,13 @@
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 
 public class test {
 
-    public static void main(String args[]) {
-        Matrix t = new Matrix(new double[][] {{1, 2, 3}, {4, 5, 6}});
-        Matrix.transpose(t).print();
+    public static void main(String args[]) throws AWTException, IOException {
+        Mapper map = new Mapper(5, 5, 5);
+        map.findSnakeGame();
     }
 
 }
