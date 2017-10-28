@@ -17,7 +17,11 @@ public class Matrix {
         }
     }
 
-    public Matrix(double[][] d, short i) {
+    public Matrix(double[][] d, int i) {
+        matrix = d;
+    }
+
+    public void setRaw(double[][] d) {
         matrix = d;
     }
 

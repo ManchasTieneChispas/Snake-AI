@@ -11,8 +11,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Mapper {
-
-    private int[] input;
+    private double[] input;
     private double[][] ih; //weights from input to hidden
     private double[] hidden;
     private double[][] ho; //weights from hidden to output
@@ -29,40 +28,68 @@ public class Mapper {
     private Rectangle screenRec;
 
 
-    public Mapper(int i, int h, int o) throws AWTException {
-        input = new int[i];
+    public Mapper(int i, int h, int o) throws AWTException, IOException {
+        input = new double[i];
         hidden = new double[h];
         output = new double[o];
-        ih = new double[i][h];
-        ho = new double[h][o];
+        ih = new double[h][i];
+        ho = new double[o][h];
+
         grabber = new Robot();
         BufferedImage screen = null;
-        runner = new KeyFrame(Duration.millis(37.5), event -> {
-            //screen = grabber.createScreenCapture(new Rectangle());
-        });
-        timer = new Timeline(runner);
         corners = new HashMap<String, int[]>();
+        generateRandomWeights();
     }
 
-    public HashMap<String, int[]> run() {
-        screen = grabber.createScreenCapture(screenRec);
-        input = averageRGB();
-        for(int i = 0; i < in.length; i++) {
-
+    public void start() throws InterruptedException{
+        while(true) {
+            run();
+            Thread.sleep(38);
         }
     }
 
-    public int[] averageRGB() {
+    public void generateRandomWeights() {
+        for(int h = 0; h < ih.length; h++) {
+            for(int i = 0; i < ih[0].length; i++) {
+                ih[h][i] = (Math.random() * 2) -1;
+            }
+        }
+        for(int o = 0; o < ho.length; o++) {
+            for(int h = 0; h < ho[0].length; h++) {
+                ho[o][h] = (Math.random() * 2) -1;
+            }
+        }
+    }
+
+    public void run() {
+        screen = grabber.createScreenCapture(screenRec);
+        input = averageRGB();
+        for(int h = 0; h < hidden.length; h++) {
+            for(int i = 0; i < input.length; i++) {
+                hidden[h] += input[i] * ih[h][i];
+            }
+            hidden[h] = sigmoid(hidden[h]);
+        }
+        for(int o = 0; o < output.length; o++) {
+            for(int h = 0; h < hidden.length; h++) {
+                output[o] += hidden[h] * ho[o][h];
+            }
+            output[o] = sigmoid(output[o]);
+            System.out.println(output[o]);
+        }
+    }
+
+    public double[] averageRGB() {
         //screen = grabber.createScreenCapture(screenRec); //temporaty
         int pix[] = screen.getRGB(0, 0, (int)screenRec.getWidth(), (int)screenRec.getHeight(), null, 0, (int)screenRec.getWidth());
         Color[] c= new Color[pix.length];
         int sum = 0;
-        int[]  gray = new int[pix.length];
+        double[]  gray = new double[pix.length];
         for(int i = 0; i < pix.length; i++) {
             sum = 0;
             c[i] = new Color(pix[i], true);
             sum+= c[i].getBlue() + c[i].getGreen() + c[i].getRed();
-            gray[i] = (int)(sum/3);
+            gray[i] = (double)(sum/3);
         }
         return gray;
     }
