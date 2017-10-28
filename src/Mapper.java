@@ -16,6 +16,8 @@ public class Mapper {
     private double[] hidden;
     private double[][] ho; //weights from hidden to output
     private double[] output;
+    private double[][][] ihepochs;
+    private double[][][] hoepochs;
     private Robot grabber;
     private KeyFrame runner;
     private Timeline timer;
@@ -43,7 +45,10 @@ public class Mapper {
 
     public void start() throws InterruptedException{
         while(true) {
+            //long t = System.currentTimeMillis();
             run();
+            //long s = System.currentTimeMillis() - t;
+            //System.out.println(s);
             Thread.sleep(38);
         }
     }
@@ -75,7 +80,6 @@ public class Mapper {
                 output[o] += hidden[h] * ho[o][h];
             }
             output[o] = sigmoid(output[o]);
-            System.out.println(output[o]);
         }
     }
 
@@ -123,7 +127,13 @@ public class Mapper {
         ImageIO.write(first, "jpg", outputfile);
     }
 
+    public double fitnessScore() {
 
+    }
+
+    public void train() {
+
+    }
 
 
     //sigmoid function
