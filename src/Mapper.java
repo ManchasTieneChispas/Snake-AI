@@ -12,28 +12,29 @@ import java.util.HashMap;
 
 public class Mapper {
 
-    private Matrix input;
-    private Matrix ih; //weights from input to hidden
-    private Matrix hidden;
-    private Matrix ho; //weights from hidden to output
-    private Matrix output;
+    private int[] input;
+    private double[][] ih; //weights from input to hidden
+    private double[] hidden;
+    private double[][] ho; //weights from hidden to output
+    private double[] output;
     private Robot grabber;
     private KeyFrame runner;
     private Timeline timer;
-    private BufferedImage scree;
+    private BufferedImage screen;
     private String tleft = "topleft";
     private String tright = "topright";
     private String bleft = "bottomLeft";
     private String bright= "bottomright";
     private HashMap<String, int[]> corners;
+    private Rectangle screenRec;
 
 
     public Mapper(int i, int h, int o) throws AWTException {
-        input = new Matrix(i, 1);
-        hidden = new Matrix(h, 1);
-        output = new Matrix(o, 1);
-        ih = new Matrix(i, h);
-        ho = new Matrix(h, o);
+        input = new int[i];
+        hidden = new double[h];
+        output = new double[o];
+        ih = new double[i][h];
+        ho = new double[h][o];
         grabber = new Robot();
         BufferedImage screen = null;
         runner = new KeyFrame(Duration.millis(37.5), event -> {
@@ -41,6 +42,29 @@ public class Mapper {
         });
         timer = new Timeline(runner);
         corners = new HashMap<String, int[]>();
+    }
+
+    public HashMap<String, int[]> run() {
+        screen = grabber.createScreenCapture(screenRec);
+        input = averageRGB();
+        for(int i = 0; i < in.length; i++) {
+
+        }
+    }
+
+    public int[] averageRGB() {
+        //screen = grabber.createScreenCapture(screenRec); //temporaty
+        int pix[] = screen.getRGB(0, 0, (int)screenRec.getWidth(), (int)screenRec.getHeight(), null, 0, (int)screenRec.getWidth());
+        Color[] c= new Color[pix.length];
+        int sum = 0;
+        int[]  gray = new int[pix.length];
+        for(int i = 0; i < pix.length; i++) {
+            sum = 0;
+            c[i] = new Color(pix[i], true);
+            sum+= c[i].getBlue() + c[i].getGreen() + c[i].getRed();
+            gray[i] = (int)(sum/3);
+        }
+        return gray;
     }
 
     public void findSnakeGame() throws AWTException, IOException {
@@ -67,6 +91,7 @@ public class Mapper {
         int width = corners.get(tright)[0] - corners.get(tleft)[0];
         int height = corners.get(bleft)[1] - corners.get(tleft)[1];
         first = grabber.createScreenCapture(new Rectangle(corners.get(tleft)[0], corners.get(tleft)[1], width, height));
+        screenRec = new Rectangle(corners.get(tleft)[0], corners.get(tleft)[1], width, height);
         File outputfile = new File("image.jpg");
         ImageIO.write(first, "jpg", outputfile);
     }

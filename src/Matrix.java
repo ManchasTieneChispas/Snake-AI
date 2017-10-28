@@ -17,6 +17,11 @@ public class Matrix {
         }
     }
 
+    public Matrix(double[][] d, short i) {
+        matrix = d;
+    }
+
+
     public static Matrix add(Matrix fi , Matrix se) {
         double[][] o = fi.getRaw();
         double[][] s = se.getRaw();
