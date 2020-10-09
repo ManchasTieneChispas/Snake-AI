@@ -1,0 +1,22 @@
+{
+  "name": "snake-ai",
+  "version": "1.0.0",
+  "description": "SnakeAI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ManchasTieneChispas/Snake-AI.git"
+  },
+  "author": "William Giraldo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ManchasTieneChispas/Snake-AI/issues"
+  },
+  "homepage": "https://github.com/ManchasTieneChispas/Snake-AI#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

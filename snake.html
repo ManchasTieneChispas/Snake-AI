@@ -1,0 +1,97 @@
+<div style="backgroung-color: black;">
+  <canvas id="game" width="500" height="500" background="black"></canvas>
+</div>
+<script type="text/javascript">
+  window.onload = function () {
+    c = document.getElementById("game");
+    ctx = c.getContext("2d");
+    document.addEventListener("keydown", keyPush);
+    setInterval(game, 1000 / 15);
+  };
+
+  snake = [];
+  headX = headY = 13;
+  segSize = 20;
+  boardSize = 500 / segSize;
+  tail = 5;
+  appleX = Math.floor(Math.random() * boardSize);
+  appleY = Math.floor(Math.random() * boardSize);
+  xVel = 1;
+  yVel = 0;
+  last = 0;
+
+  function game() {
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, c.width, c.height);
+    headX += xVel;
+    headY += yVel;
+
+    if (headX > 25) {
+      headX = 0;
+    } else if (headX < 0) {
+      headX = 25;
+    }
+    if (headY < 0) {
+      headY = 25;
+    } else if (headY > 25) {
+      headY = 0;
+    }
+
+    ctx.fillStyle = "green";
+    for (var i = 0; i < snake.length; i++) {
+      ctx.fillRect(
+        snake[i].x * segSize,
+        snake[i].y * segSize,
+        segSize - 1,
+        segSize - 1
+      );
+      if (snake[i].x == headX && snake[i].y == headY) {
+        tail = 5;
+      }
+    }
+    snake.push({ x: headX, y: headY });
+    if (headX == appleX && headY == appleY) {
+      tail += 1;
+      appleX = Math.floor(Math.random() * boardSize);
+      appleY = Math.floor(Math.random() * boardSize);
+    }
+    ctx.fillStyle = "red";
+    ctx.fillRect(appleX * segSize, appleY * segSize, segSize - 1, segSize - 1);
+    while (snake.length > tail) {
+      snake.shift();
+    }
+  }
+
+  function keyPush(e) {
+    switch (e.keyCode) {
+      case 37:
+        if (last != 39) {
+          xVel = -1;
+          yVel = 0;
+          last = 37;
+        }
+        break;
+      case 38:
+        if (last != 40) {
+          xVel = 0;
+          yVel = -1;
+          last = 38;
+        }
+        break;
+      case 39:
+        if (last != 37) {
+          xVel = 1;
+          yVel = 0;
+          last = 39;
+        }
+        break;
+      case 40:
+        if (last != 38) {
+          xVel = 0;
+          yVel = 1;
+          last = 40;
+        }
+        break;
+    }
+  }
+</script>
